@@ -1,0 +1,2 @@
+# chatroom
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9226ba06040841469150dd1a89c768ba)](https://app.codacy.com/gh/justinstander/chatroom?utm_source=github.com&utm_medium=referral&utm_content=justinstander/chatroom&utm_campaign=Badge_Grade)
