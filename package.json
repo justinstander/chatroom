@@ -1,0 +1,21 @@
+{
+  "name": "chatroom",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justinstander/chatroom.git"
+  },
+  "author": "Justin Stander",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/justinstander/chatroom/issues"
+  },
+  "homepage": "https://github.com/justinstander/chatroom#readme",
+  "description": "",
+  "devDependencies": {
+    "@aws-sdk/client-apigatewayv2": "^3.738.0"
+  }
+}
