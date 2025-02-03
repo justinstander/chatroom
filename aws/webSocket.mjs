@@ -5,18 +5,18 @@ import {
   CreateApiCommand,
   DeleteApiCommand,
   CreateStageCommand,
-  DeleteStageCommand
+  DeleteStageCommand,
+  CreateRouteCommand,
+  DeleteRouteCommand,
+  CreateIntegrationCommand,
+  DeleteIntegrationCommand,
+  CreateDeploymentCommand
 } from "@aws-sdk/client-apigatewayv2";
 import { sendCommand } from "./common.mjs";
-
-console.log(process.argv);
-
-if (!process.argv[2]) {
-  throw new Error("Command is required");
-};
+import { ProtocolType, RouteSelectionExpression } from "./constants.mjs";
 
 const client = new ApiGatewayV2Client();
-const command = process.argv[2];
+const send = sendCommand(client);
 
 /**
  * Create an API Gateway Web Socket API
@@ -25,18 +25,13 @@ const command = process.argv[2];
  * @param {string} args[0] Web Socket Name
  * @returns API response from command
  */
-const createApi = async ([Name]) => {
-  const ProtocolType = "WEBSOCKET";
-  const RouteSelectionExpression = "request.body.action";
-
-  const command = new CreateApiCommand({
+const createApi = async (Name) => await send(
+  new CreateApiCommand({
     Name,
     ProtocolType,
     RouteSelectionExpression
-  });
-
-  return await sendCommand(client, command);
-};
+  })
+);
 
 /**
  * Delete an API Gateway Web Socket API
@@ -45,50 +40,138 @@ const createApi = async ([Name]) => {
  * @param {string} args[0] Web Socket API ID
  * @returns API response from command
  */
-const deleteApi = async ([ApiId]) => {
-  const command = new DeleteApiCommand({
+const deleteApi = async (ApiId) => await send(
+  new DeleteApiCommand({
     ApiId
-  });
-
-  return await sendCommand(client, command);
-};
+  })
+);
 
 /**
  * 
  * @param {*} param0 
  * @returns 
  */
-const createStage = async ([ApiId, StageName]) => {
-  const command = new CreateStageCommand({ApiId, StageName});
-
-  return await sendCommand(client, command);
-};
+const createStage = async (ApiId, StageName) => await send(
+  new CreateStageCommand({
+    ApiId,
+    StageName
+  })
+);
 
 /**
  * 
  * @param {*} param0 
  * @returns 
  */
-const deleteStage = async ([ApiId, StageName]) => {
-  const command = new DeleteStageCommand({ApiId, StageName});
+const deleteStage = async (ApiId, StageName) => await send(
+  new DeleteStageCommand({
+    ApiId,
+    StageName
+  })
+);
 
-  return await sendCommand(client, command);
-};
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const createRoute = async (ApiId, RouteKey, Target) => await send(
+  new CreateRouteCommand({
+    ApiId,
+    RouteKey,
+    Target
+  })
+);
+
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const deleteRoute = async (ApiId, RouteId) => await send(
+  new DeleteRouteCommand({
+    ApiId,
+    RouteId
+  })
+);
+
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const createIntegration = async (ApiId, IntegrationType) => await send(
+  new CreateIntegrationCommand({
+    ApiId,
+    IntegrationType
+  })
+);
+
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const deleteIntergration = async (ApiId, IntegrationId) => await send(
+  new DeleteIntegrationCommand({
+    ApiId,
+    IntegrationId
+  })
+);
+
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const createDeployment = async (ApiId, StageName) => await send(
+  new CreateDeploymentCommand({
+    ApiId,
+    StageName
+  })
+);
+
+const buildWebSocket = async (Name) => {
+  const { ApiId } = await createApi(Name);
+  const { StageName } = await createStage(ApiId, "stage");
+  const { IntegrationId } = await createIntegration(ApiId, "MOCK");
+  
+  await createRoute(ApiId, "chat", `integrations/${IntegrationId}`);
+  await createDeployment(ApiId, StageName);
+}
+
+console.log(process.argv);
 
 const args = process.argv.slice(3);
+const command = process.argv[2];
 
 switch (command) {
   case "createApi":
-    createApi(args);
+    createApi(...args);
     break;
   case "deleteApi":
-    deleteApi(args);
+    deleteApi(...args);
     break;
   case "createStage":
-    createStage(args);
+    createStage(...args);
     break;
   case "deleteStage":
-    deleteStage(args);
+    deleteStage(...args);
+    break;
+  case "createRoute":
+    createRoute(...args);
+    break;
+  case "deleteRoute":
+    deleteRoute(...args);
+    break;
+  case "createIntegration":
+    createIntegration(...args);
+    break;
+  case "deleteIntegration":
+    deleteIntergration(...args);
+    break;
+  case "buildWebSocket":
+    buildWebSocket(...args);
     break;
   default:
     throw new Error("Invalid Command");
