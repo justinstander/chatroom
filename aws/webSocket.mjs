@@ -13,7 +13,7 @@ import {
   CreateDeploymentCommand
 } from "@aws-sdk/client-apigatewayv2";
 import { sendCommand } from "./common.mjs";
-import { ProtocolType, RouteSelectionExpression } from "./constants.mjs";
+import { MOCK, ProtocolType, RouteSelectionExpression, STAGE, Description } from "./constants.mjs";
 
 const client = new ApiGatewayV2Client();
 const send = sendCommand(client);
@@ -27,6 +27,7 @@ const send = sendCommand(client);
  */
 const createApi = async (Name) => await send(
   new CreateApiCommand({
+    Description,
     Name,
     ProtocolType,
     RouteSelectionExpression
@@ -133,11 +134,20 @@ const createDeployment = async (ApiId, StageName) => await send(
 
 const buildWebSocket = async (Name) => {
   const { ApiId } = await createApi(Name);
-  const { StageName } = await createStage(ApiId, "stage");
-  const { IntegrationId } = await createIntegration(ApiId, "MOCK");
-  
+  const { StageName } = await createStage(ApiId, STAGE);
+  const { IntegrationId } = await createIntegration(ApiId, MOCK);
+
   await createRoute(ApiId, "chat", `integrations/${IntegrationId}`);
-  await createDeployment(ApiId, StageName);
+
+  return { ApiId, StageName };
+}
+
+const deployWebSocket = async (ApiId, StageName) => await createDeployment(ApiId, StageName);
+
+const buildAndDeployWebSocket = async (Name) => {
+  const { ApiId, StageName } = await buildWebSocket(Name);
+
+  await deployWebSocket(ApiId, StageName);
 }
 
 console.log(process.argv);
@@ -172,6 +182,12 @@ switch (command) {
     break;
   case "buildWebSocket":
     buildWebSocket(...args);
+    break;
+  case "deployWebSocket":
+    deployWebSocket(...args);
+    break;
+  case "buildAndDeployWebSocket":
+    buildAndDeployWebSocket(...args);
     break;
   default:
     throw new Error("Invalid Command");
