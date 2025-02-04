@@ -12,3 +12,17 @@ export const sendCommand = (client) => async (command) => {
 
   return response;
 };
+
+/**
+ * Gives us what we need from the command line
+ * 
+ * @returns what we need form the command line
+ */
+export const commandLine = () => {
+  console.log(process.argv);
+
+  const args = process.argv.slice(3);
+  const command = process.argv[2];
+
+  return { args, command };
+}

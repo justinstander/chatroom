@@ -12,7 +12,7 @@ import {
   DeleteIntegrationCommand,
   CreateDeploymentCommand
 } from "@aws-sdk/client-apigatewayv2";
-import { sendCommand } from "./common.mjs";
+import { commandLine, sendCommand } from "./common.mjs";
 import { MOCK, ProtocolType, RouteSelectionExpression, STAGE, Description } from "./constants.mjs";
 
 const client = new ApiGatewayV2Client();
@@ -150,10 +150,7 @@ const buildAndDeployWebSocket = async (Name) => {
   await deployWebSocket(ApiId, StageName);
 }
 
-console.log(process.argv);
-
-const args = process.argv.slice(3);
-const command = process.argv[2];
+const { args, command } = commandLine();
 
 switch (command) {
   case "createApi":
