@@ -1,0 +1,26 @@
+{
+  "headers": {
+    "Host": "9lviviv3oc.execute-api.us-east-1.amazonaws.com",
+    "Origin": "https://192.168.0.151:8000"
+  },
+  "requestContext": {
+    "routeKey": "clientOpen",
+    "messageId": "Lda4id67IAMCLZw=",
+    "eventType": "MESSAGE",
+    "extendedRequestId": "Lda4iEJ8IAMEOTg=",
+    "requestTime": "01/Jun/2025:00:55:31 +0000",
+    "messageDirection": "IN",
+    "stage": "production",
+    "connectedAt": 1748739317834,
+    "requestTimeEpoch": 1748739331043,
+    "identity": {
+      "sourceIp": "012.34.56.789"
+    },
+    "requestId": "Lf4P0cfwIAMCEYA=",
+    "domainName": "9lviviv3oc.execute-api.us-east-1.amazonaws.com",
+    "connectionId": "NTY8relIoAMCFBw=",
+    "apiId": "9lviviv3oc"
+  },
+  "body": "The Message.",
+  "isBase64Encoded": false
+}
