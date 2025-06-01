@@ -1,0 +1,10 @@
+node_modules
+
+# Test Events have sensitive data
+*Event.json
+
+# deployments
+*.zip
+
+# Codacy
+.codacy
