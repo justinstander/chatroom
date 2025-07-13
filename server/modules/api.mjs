@@ -71,6 +71,7 @@ export const broadcastCount = async ({ requestContext: { stage, domainName } }) 
   });
 
   for (let i = 0, connectionId; i < connectionIdsLength; i++) {
+    // eslint-disable-next-line security/detect-object-injection
     connectionId = connectionIds[i].connectionId.S;
 
     await sendToClient({ connectionId, Data, stage, domainName, deleteOnError: false });

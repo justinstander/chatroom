@@ -3,6 +3,7 @@ Ultra Scalable Low Cost End-To-End Encrypted Completely Private and Anonymous Ch
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6c8c1d99b7d542a8bbba08e7225e5526)](https://app.codacy.com/gh/justinstander/chatroom/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ### Running Locally
+
 #### Server
 
 ```
