@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Justin Stander">
+  <meta name="description" content="Cloud Native Chat - Full Stack">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>websocket</title>
+  <style>
+    /* variables */
+    :root {
+      --border: 1px solid #000;
+    }
+
+    body,
+    html,
+    section {
+      height: 100%;
+    }
+
+    article {
+      margin: 0.5rem;
+    }
+
+    header {
+      font-family: sans-serif;
+      height: 2rem;
+      padding: 0.5rem;
+      align-items: center;
+      border-bottom: var(--border);
+    }
+
+    /* flex */
+    body,
+    footer,
+    header,
+    main,
+    section {
+      display: flex;
+    }
+
+    /* column */
+    body,
+    main,
+    section {
+      flex-direction: column;
+    }
+
+    section {
+      gap: 0.5rem;
+    }
+
+    body {
+      background-color: #fff;
+      margin: 0;
+    }
+
+    footer {
+      flex: 0 1;
+      width: 100%;
+    }
+
+    html {
+      font-size: 16px;
+      background-color: #000;
+    }
+
+    input {
+      flex: 1;
+      height: 2rem;
+    }
+
+    main {
+      flex: 1;
+      overflow: auto;
+    }
+
+    #userCount {
+      text-align: center;
+    }
+
+    .grow {
+      flex-grow: 1;
+    }
+
+    .noShrink {
+      flex-shrink: 0;
+    }
+
+    .textRight {
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <span id="connectionStatus" class="noShrink">Connecting...</span>
+    <span id="userCount" class="grow"></span>
+    <small class="noShrink textRight">© 2025<br/>The Author.</small>
+  </header>
+  <nav>
+  </nav>
+  <main>
+    <article>
+      <section></section>
+    </article>
+  </main>
+  <footer>
+    <input disabled id="messageInput" aria-label="message input" type="input"></input>
+    <button class="noShrink" id="sendButton">Send</button>
+  </footer>
+  <script type="module">
+    import index from './index.mjs';
+  </script>
+</body>
+
+</html>
