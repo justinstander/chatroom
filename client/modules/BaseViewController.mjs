@@ -47,8 +47,6 @@ export class BaseViewController {
     }
 
     this.viewHeight = height;
-
-    this.resize();
   };
 
   #loadHandler = () => {
@@ -59,11 +57,7 @@ export class BaseViewController {
     } else {
       this.viewHeight = height;
     }
-
-    this.load();
   }
-
-  #pageshowHandler = () => this.pageShow();
 
   #beforeunloadHandler = () => this.destroy();
 
@@ -76,13 +70,11 @@ export class BaseViewController {
     
     document.addEventListener('DOMContentLoaded', this.#domContentLoadedHandler);
     document.addEventListener('readystatechange', this.#readyStateChangeHandler);
-
-    window.addEventListener('pageshow', this.#pageshowHandler);
   }
 
   #update() {
     if(this.#isLoaded && this.#isComplete) {
-      this.ready();
+      console.log('ready.');
     }
   }
 
@@ -104,21 +96,6 @@ export class BaseViewController {
     this.#update();
   }
 
-  init() {
-  }
-
-  ready() {
-  }
-
-  resize() {
-  }
-
-  load() {
-  }
-
-  pageShow() {
-  }
-
   destroy() {
     window.removeEventListener('beforeunload', this.#beforeunloadHandler);
     window.removeEventListener('load',this.#loadHandler);
@@ -129,6 +106,5 @@ export class BaseViewController {
 
     window.removeEventListener('blur',console.log);
     window.removeEventListener('focus',console.log);
-    window.removeEventListener('pageshow', this.#pageshowHandler);
   }
 }

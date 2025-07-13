@@ -120,13 +120,9 @@ class Controller extends BaseViewController {
   };
 
   /**
-   * Do not call directly on this subclass.
    * 
-   * @override
    */
   init() {
-    super.init();
-
     this.#connectionStatus = document.querySelector('#connectionStatus');
     this.#userCount = document.querySelector('#userCount');
     this.#messages = document.querySelector('main article section');
