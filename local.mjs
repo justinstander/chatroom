@@ -11,6 +11,10 @@ const testConnect = async () => await handler(
   (await import('./ConnectEvent.json', importParams))?.default
 );
 
+const testClientOpen = async () => await handler(
+  (await import('./ClientOpenEvent.json', importParams))?.default
+);
+
 const testDisconnect = async () => await handler(
   (await import('./DisconnectEvent.json', importParams))?.default
 );
@@ -26,6 +30,9 @@ const testMessage = async () => await handler(
 switch (command) {
   case "connect":
     await testConnect();
+    break;
+  case "clientOpen":
+    await testClientOpen();
     break;
   case "disconnect":
     await testDisconnect();

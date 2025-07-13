@@ -90,6 +90,7 @@ export const broadcastMessage = async ({
   const connectionIdsLength = connectionIds.length;
 
   for (let i = 0, connectionId; i < connectionIdsLength; i++) {
+    // eslint-disable-next-line security/detect-object-injection
     connectionId = connectionIds[i].connectionId.S;
 
     await sendMessageToClient({ connectionId, data, requestContext });
