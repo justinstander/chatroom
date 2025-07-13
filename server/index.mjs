@@ -2,6 +2,9 @@ import { broadcastCount, broadcastMessage, sendToClient } from './modules/api.mj
 import { deleteConnectionId, getConnectionIds, putConnectionId } from './modules/db.mjs';
 import { publishConnectionNotification } from './modules/notifications.mjs';
 
+/**
+ * 
+ */
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') ?? [];
 
 /**
@@ -19,6 +22,64 @@ const handleError = (error) => {
 };
 
 /**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+const routeConnect = async ({
+  headers,
+  requestContext
+}) => {
+  console.log('Connect');
+
+  const { connectionId } = requestContext;
+  const Origin = headers?.Origin ?? '(no Origin)';
+
+  if (!allowedOrigins.includes(Origin)) return handleError('CORS');
+
+  await putConnectionId(connectionId);
+  await publishConnectionNotification(`Connected: ${connectionId}\n${Origin}`);
+  await broadcastCount({ requestContext });
+};
+
+/**
+ * 
+ * @param {*} event 
+ */
+const routeClientOpen = async (event) => {
+  console.log('Client Open');
+  const {
+    requestContext: { connectionId, stage, domainName }
+  } = event;
+
+  const connectionIds = await getConnectionIds();
+  const connectionIdsLength = connectionIds.length;
+
+  await sendToClient({
+    connectionId, Data: JSON.stringify({
+      body: `Users: ${connectionIdsLength}`,
+      type: 'count'
+    }), stage, domainName, deleteOnError: false
+  });
+};
+
+/**
+ * 
+ * @param {*} param0 
+ */
+const routeDisconnect = async ({
+  requestContext
+}) => {
+  console.log('Disconnect');
+
+  const { connectionId } = requestContext;
+
+  await deleteConnectionId(connectionId);
+  await publishConnectionNotification(`Disconnect: ${connectionId}`);
+  await broadcastCount({ requestContext });
+};
+
+/**
  * AWS Lambda handler
  * 
  * @param {*} event 
@@ -28,43 +89,22 @@ export const handler = async (event) => {
   console.log(event);
 
   const {
-    body,
-    headers,
-    requestContext
+    requestContext: { routeKey }
   } = event;
-  const { routeKey, connectionId, stage, domainName } = requestContext;
 
   try {
     switch (routeKey) {
       case '$connect':
-        console.log('Connect');
-        const Origin = headers?.Origin ?? '(no Origin)';
-
-        if (!allowedOrigins.includes(Origin)) return handleError('CORS');
-
-        await putConnectionId(connectionId);
-        await publishConnectionNotification(`Connected: ${connectionId}\n${Origin}`);
-        await broadcastCount({ requestContext });
+        await routeConnect(event);
         break;
       case '$disconnect':
-        console.log('Disconnect');
-        await deleteConnectionId(connectionId);
-        await publishConnectionNotification(`Disconnect: ${connectionId}`);
-        await broadcastCount({ requestContext });
+        await routeDisconnect(event);
         break;
       case 'clientOpen':
-        console.log('Client Open');
-        const connectionIds = await getConnectionIds();
-        const connectionIdsLength = connectionIds.length;
-        await sendToClient({
-          connectionId, Data: JSON.stringify({
-            body: `Users: ${connectionIdsLength}`,
-            type: 'count'
-          }), stage, domainName, deleteOnError: false
-        });
+        routeClientOpen(event);
         break;
       case '$default':
-        await broadcastMessage({ body, requestContext });
+        await broadcastMessage(event);
         break;
       default:
         return handleError(new Error(`Unsupported route: ${routeKey}`));
