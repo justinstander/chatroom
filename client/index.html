@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="author" content="Justin Stander">
   <meta name="description" content="Cloud Native Chat - Full Stack">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
   <title>websocket</title>
   <style>
     /* variables */
@@ -13,8 +13,8 @@
       --border: 1px solid #000;
     }
 
-    body,
-    html,
+    html, body {margin: 0; height: 100%; overflow: hidden}
+
     section {
       height: 100%;
     }
@@ -53,7 +53,6 @@
 
     body {
       background-color: #fff;
-      margin: 0;
     }
 
     footer {
