@@ -101,7 +101,7 @@ export const handler = async (event) => {
         await routeDisconnect(event);
         break;
       case 'clientOpen':
-        routeClientOpen(event);
+        await routeClientOpen(event);
         break;
       case '$default':
         await broadcastMessage(event);
