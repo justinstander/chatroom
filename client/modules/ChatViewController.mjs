@@ -1,5 +1,3 @@
-import { BaseViewController } from './BaseViewController.mjs';
-
 export const keyEnter = 'Enter';
 
 export const urlWebSocket = 'wss://dgsgppicwa64c.cloudfront.net';
@@ -7,7 +5,7 @@ export const urlWebSocket = 'wss://dgsgppicwa64c.cloudfront.net';
 /**
  * 
  */
-class Controller extends BaseViewController {
+class Controller {
   #userCount;
   #connectionStatus;
   #messageInput;
