@@ -66,7 +66,7 @@ export const broadcastCount = async ({ requestContext: { stage, domainName } }) 
   const connectionIds = await getConnectionIds();
   const connectionIdsLength = connectionIds.length;
   const Data = JSON.stringify({
-    body: `Users: ${connectionIdsLength}`,
+    body: connectionIdsLength.toString(),
     type: 'count'
   });
 

@@ -11,24 +11,25 @@
     /* variables */
     :root {
       --border: 1px solid #000;
+      --color-blue: #7ca9f2;
+      --color-disabled: #ffffff60;
+      --space-medium: 0.5rem;
+      --size-circle: 3rem;
     }
 
-    html, body {margin: 0; height: 100%; overflow: hidden}
-
-    section {
+    html, body {
+      margin: 0;
       height: 100%;
+      overflow: hidden
     }
 
-    article {
-      margin: 0.5rem;
-    }
-
-    header {
+    html {
       font-family: sans-serif;
-      height: 2rem;
-      padding: 0.5rem;
-      align-items: center;
-      border-bottom: var(--border);
+      background-color: #000;
+    }
+
+    html, input {
+      font-size: 16px;
     }
 
     /* flex */
@@ -40,15 +41,34 @@
       display: flex;
     }
 
-    /* column */
+    header, footer, section {
+      gap: var(--space-medium);
+    }
+
     body,
     main,
     section {
       flex-direction: column;
     }
 
+    /* */
+
+    input, button {
+      border-radius: 8px;
+    }
+
     section {
-      gap: 0.5rem;
+      height: 100%;
+    }
+
+    article {
+      margin: var(--space-medium);
+    }
+
+    header {
+      padding: var(--space-medium);
+      align-items: center;
+      border-bottom: var(--border);
     }
 
     body {
@@ -56,17 +76,17 @@
     }
 
     footer {
+      align-items: center;
+      border-top: var(--border);
       flex: 0 1;
-    }
-
-    html {
-      font-size: 16px;
-      background-color: #000;
+      padding: var(--space-medium);
     }
 
     input {
       flex: 1;
       height: 2rem;
+      padding-inline-start: var(--space-medium);
+      padding-inline-end: var(--space-medium);
     }
 
     main {
@@ -74,8 +94,30 @@
       overflow: auto;
     }
 
-    #userCount {
+    #connectionStatus {
       text-align: center;
+    }
+
+    #sendButton {
+      border: none;
+      background-color: var(--color-blue);
+      color:#fff;
+    }
+    #sendButton:disabled {
+      color: var(--color-disabled);
+    }
+
+    #userCount {
+      background: var(--color-blue);
+      text-align: center;
+      align-content: center;
+      color: #ffff;
+    }
+
+    .circle {
+      width: var(--size-circle);
+      height: var(--size-circle);
+      border-radius: var(--size-circle);
     }
 
     .grow {
@@ -94,8 +136,8 @@
 
 <body>
   <header>
-    <span id="connectionStatus" class="noShrink">Connecting...</span>
-    <span id="userCount" class="grow"></span>
+    <div id="userCount" class="circle"></div>
+    <span id="connectionStatus" class="grow">Connecting...</span>
     <small class="noShrink textRight">© 2025<br/>The Author.</small>
   </header>
   <nav>
@@ -106,8 +148,8 @@
     </article>
   </main>
   <footer>
-    <input disabled id="messageInput" aria-label="message input" type="input"></input>
-    <button disabled id="sendButton" class="noShrink">Send</button>
+    <input disabled id="messageInput" aria-label="message input" type="input" placeholder="Type your message here..."></input>
+    <button disabled id="sendButton" class="circle noShrink">Send</button>
   </footer>
   <script type="module">
     import index from './index.mjs';

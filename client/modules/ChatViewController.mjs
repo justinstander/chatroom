@@ -27,7 +27,7 @@ class Controller {
    * @returns undefined
    */
   #closeHandler = () => {
-    this.#updateConnectionStatus('Connection Closed.');
+    this.#updateConnectionStatus('Disconnected');
     this.#disabled = true;
   }
 
@@ -68,7 +68,7 @@ class Controller {
         this.#writeMessage(body);
         break;
       case 'count':
-        this.#updateUserAccount(body)
+        this.#updateUserCount(body)
         break;
       default:
         break;
@@ -80,7 +80,7 @@ class Controller {
    * @returns 
    */
   #openHandler = () => {
-    this.#updateConnectionStatus('Connection Open.');
+    this.#updateConnectionStatus('Connected');
     this.#messageInput.disabled = false;
     this.#webSocket.send(JSON.stringify({action:'clientOpen'}))
   };
@@ -95,6 +95,7 @@ class Controller {
     
     this.#webSocket.send(value);
     this.#messageInput.value = '';
+    this.#messageInput.focus();
     this.#sendButton.disabled = true;
   };
 
@@ -110,7 +111,7 @@ class Controller {
    * 
    * @param {*} text 
    */
-  #updateUserAccount = (text) => {
+  #updateUserCount = (text) => {
     this.#userCount.innerText = text;
   }
 

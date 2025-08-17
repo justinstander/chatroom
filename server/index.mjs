@@ -57,7 +57,7 @@ const routeClientOpen = async (event) => {
 
   await sendToClient({
     connectionId, Data: JSON.stringify({
-      body: `Users: ${connectionIdsLength}`,
+      body: `${connectionIdsLength}`,
       type: 'count'
     }), stage, domainName, deleteOnError: false
   });
