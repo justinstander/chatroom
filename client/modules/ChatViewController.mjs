@@ -29,6 +29,7 @@ class Controller {
   #closeHandler = () => {
     this.#updateConnectionStatus('Disconnected');
     this.#disabled = true;
+    this.#messageInput.placeholder = '';
   }
 
   /**
