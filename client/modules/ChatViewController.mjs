@@ -1,5 +1,3 @@
-import { BaseViewController } from './BaseViewController.mjs';
-
 export const keyEnter = 'Enter';
 
 export const urlWebSocket = 'wss://dgsgppicwa64c.cloudfront.net';
@@ -7,7 +5,7 @@ export const urlWebSocket = 'wss://dgsgppicwa64c.cloudfront.net';
 /**
  * 
  */
-class Controller extends BaseViewController {
+class Controller {
   #userCount;
   #connectionStatus;
   #messageInput;
@@ -29,7 +27,7 @@ class Controller extends BaseViewController {
    * @returns undefined
    */
   #closeHandler = () => {
-    this.#updateConnectionStatus('Connection Closed.');
+    this.#updateConnectionStatus('Disconnected');
     this.#disabled = true;
   }
 
@@ -45,9 +43,14 @@ class Controller extends BaseViewController {
    * 
    * @param {{key, target}} event
    */
-  #keydownHandler = ({ key, target }) => {
+  #keyupHandler = ({ key, target }) => {
     if (key === keyEnter && target.value) {
       this.#sendMessage();
+    }
+    if( !this.#messageInput.value ) {
+      this.#sendButton.disabled = true;
+    } else if( this.#sendButton.disabled ) {
+      this.#sendButton.disabled = false;
     }
   }
 
@@ -65,7 +68,7 @@ class Controller extends BaseViewController {
         this.#writeMessage(body);
         break;
       case 'count':
-        this.#updateUserAccount(body)
+        this.#updateUserCount(body)
         break;
       default:
         break;
@@ -77,8 +80,8 @@ class Controller extends BaseViewController {
    * @returns 
    */
   #openHandler = () => {
-    this.#updateConnectionStatus('Connection Open.');
-    this.#disabled = false;
+    this.#updateConnectionStatus('Connected');
+    this.#messageInput.disabled = false;
     this.#webSocket.send(JSON.stringify({action:'clientOpen'}))
   };
 
@@ -86,8 +89,14 @@ class Controller extends BaseViewController {
    * 
    */
   #sendMessage = () => {
-    this.#webSocket.send(this.#messageInput.value);
+    const { value } = this.#messageInput;
+    
+    if( !value ) return;
+    
+    this.#webSocket.send(value);
     this.#messageInput.value = '';
+    this.#messageInput.focus();
+    this.#sendButton.disabled = true;
   };
 
   /**
@@ -102,7 +111,7 @@ class Controller extends BaseViewController {
    * 
    * @param {*} text 
    */
-  #updateUserAccount = (text) => {
+  #updateUserCount = (text) => {
     this.#userCount.innerText = text;
   }
 
@@ -134,7 +143,7 @@ class Controller extends BaseViewController {
     this.#webSocket.addEventListener("error", this.#errorHandler);
 
     this.#messageInput = document.querySelector('#messageInput');
-    this.#messageInput.addEventListener('keydown', this.#keydownHandler);
+    this.#messageInput.addEventListener('keyup', this.#keyupHandler);
 
     this.#sendButton = document.querySelector('#sendButton');
     this.#sendButton.addEventListener('click', this.#sendMessage);
