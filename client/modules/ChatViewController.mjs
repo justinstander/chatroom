@@ -43,9 +43,14 @@ class Controller {
    * 
    * @param {{key, target}} event
    */
-  #keydownHandler = ({ key, target }) => {
+  #keyupHandler = ({ key, target }) => {
     if (key === keyEnter && target.value) {
       this.#sendMessage();
+    }
+    if( !this.#messageInput.value ) {
+      this.#sendButton.disabled = true;
+    } else if( this.#sendButton.disabled ) {
+      this.#sendButton.disabled = false;
     }
   }
 
@@ -76,7 +81,7 @@ class Controller {
    */
   #openHandler = () => {
     this.#updateConnectionStatus('Connection Open.');
-    this.#disabled = false;
+    this.#messageInput.disabled = false;
     this.#webSocket.send(JSON.stringify({action:'clientOpen'}))
   };
 
@@ -84,8 +89,13 @@ class Controller {
    * 
    */
   #sendMessage = () => {
-    this.#webSocket.send(this.#messageInput.value);
+    const { value } = this.#messageInput;
+    
+    if( !value ) return;
+    
+    this.#webSocket.send(value);
     this.#messageInput.value = '';
+    this.#sendButton.disabled = true;
   };
 
   /**
@@ -132,7 +142,7 @@ class Controller {
     this.#webSocket.addEventListener("error", this.#errorHandler);
 
     this.#messageInput = document.querySelector('#messageInput');
-    this.#messageInput.addEventListener('keydown', this.#keydownHandler);
+    this.#messageInput.addEventListener('keyup', this.#keyupHandler);
 
     this.#sendButton = document.querySelector('#sendButton');
     this.#sendButton.addEventListener('click', this.#sendMessage);
