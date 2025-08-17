@@ -82,7 +82,8 @@ class Controller {
   #openHandler = () => {
     this.#updateConnectionStatus('Connected');
     this.#messageInput.disabled = false;
-    this.#webSocket.send(JSON.stringify({action:'clientOpen'}))
+    this.#messageInput.placeholder = 'Type your message here...';
+    this.#webSocket.send(JSON.stringify({action:'clientOpen'}));
   };
 
   /**
