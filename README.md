@@ -4,6 +4,12 @@ Ultra Scalable Low Cost End-To-End Encrypted Completely Private and Anonymous Ch
 
 ### Running Locally
 
+When AWS asks for a profile name, if you do not want to use --profile-name in API calls, enter: "default".
+
+```
+sudo bin/install.sh && bin/authenticate.sh
+```
+
 #### Server
 
 To test while developing, you can run your code changes with:
@@ -19,7 +25,24 @@ To test while developing, you can run your code changes with:
 #### Client
 
 ```
-npm install -g local-web-server
+npm start
 
-ws --https
+https://localhost:8000/client/
 ```
+
+### Contributing
+
+#### GPG
+
+Sign commits
+
+```
+gpg --full-generate-key
+gpg --list-secret-keys --keyid-format=long
+gpg --armor --export <sec>
+
+git config --global user.signingKey <id>
+git config commit.gpgsign true
+```
+
+`Add the key: https://github.com/settings/gpg/new`
