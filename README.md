@@ -7,7 +7,7 @@ Ultra Scalable Low Cost End-To-End Encrypted Completely Private and Anonymous Ch
 When AWS asks for a profile name, if you do not want to use --profile-name in API calls, enter: "default".
 
 ```
-sudo bin/install.sh && bin/authenticate.sh
+sudo bin/install.sh && bin/configure.sh && bin/authenticate.sh
 ```
 
 #### Server

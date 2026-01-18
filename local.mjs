@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { commandLine } from "./bin/modules/common.mjs";
+import { commandLine } from "./bin/cloud/modules/common.mjs";
 import { handler } from "./server/index.mjs";
 
-const { command/*, args*/ } = commandLine();
+const { command } = commandLine();
 
-const importParams = { assert: { type: 'json' } };
+const importParams = { with: { type: 'json' } };
 
 const testConnect = async () => await handler(
   (await import('./ConnectEvent.json', importParams))?.default

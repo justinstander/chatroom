@@ -1,4 +1,13 @@
 {
+  "name": "chatroom",
+  "description": "Description Here",
+  "version": "1.0.0",
+  "author": {
+    "name": "Justin Stander",
+    "url": "https://jstander.com",
+    "email": "justin.stander@gmail.com"
+  },
+  "config": {},
   "scripts": {
     "start": "ws --https"
   },
