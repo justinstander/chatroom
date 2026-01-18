@@ -14,3 +14,5 @@ export const commandLine = () => {
 
   return { args, command };
 }
+
+export const print = (array) => console.log(array.join?.('\n') ?? array);
