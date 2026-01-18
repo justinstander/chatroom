@@ -1,8 +1,9 @@
 import { readFile } from "node:fs/promises";
-import { execSync } from 'node:child_process'; 
+import { execSync } from 'node:child_process';
 import * as fs from 'fs';
 
 import {
+  ListBucketsCommand,
   ListObjectsCommand,
   PutObjectCommand,
   S3Client
@@ -12,7 +13,9 @@ import { sendCommand } from "./common.mjs";
 
 const send = sendCommand(new S3Client());
 
-export const listObjects = async (Bucket) => await send(new ListObjectsCommand({ Bucket }));
+export const listBuckets = async () => (await send(new ListBucketsCommand())).Buckets.map(({Name}) => Name);
+
+export const listObjects = async (Bucket) => (await send(new ListObjectsCommand({ Bucket }))).Contents.map(({ Key, LastModified }) => `${Key}\t${LastModified}`);
 
 export const putObject = async (Bucket, Key, ContentType) => await send(
   new PutObjectCommand({
@@ -36,7 +39,7 @@ export const copyFiles = async (Bucket) => {
   let i;
   let ContentType;
   for (i = 0; i < filesLength; i++) {
-    ({name, parentPath} = files[i]);
+    ({ name, parentPath } = files[i]);
     ContentType = name.includes('.mjs') ? 'text/javascript' : 'text/html';
     await putObject(Bucket, `${parentPath}/${name}`, ContentType)
   }

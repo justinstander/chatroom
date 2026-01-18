@@ -4,13 +4,9 @@ import { sendCommand } from "./common.mjs";
 
 const send = sendCommand(new CloudFrontClient());
 
-export const getDistribution = async (Id) => await send(new GetDistributionCommand({ Id }));
+export const getDistribution = async (Id) => (await send(new GetDistributionCommand({ Id }))).Distribution;
 
-export const listDistributions = async () => {
-  const { DistributionList: { Items } } = await send(new ListDistributionsCommand());
-
-  return Items.map(({Id, Comment}) => `${Id} ${Comment}`);
-};
+export const listDistributions = async () => (await send(new ListDistributionsCommand())).DistributionList.Items.map(({Id, Comment}) => `${Id}\t${Comment}`);
 
 export const invalidate = async (DistributionId) => await send(
   new CreateInvalidationCommand({
