@@ -12,7 +12,7 @@ import { callerReference, sendCommand } from "./common.mjs";
 
 const send = sendCommand(new CloudFrontClient());
 
-export const createDistribution = async (Comment, origin, CachePolicyId) => await send(new CreateDistributionCommand({
+export const createDistribution = async ({Comment, origin, CachePolicyId}) => await send(new CreateDistributionCommand({
   DistributionConfig: {
     CallerReference: callerReference(),
     DefaultRootObject: "index.html",
@@ -113,21 +113,15 @@ export const disableDistribution = async (Id) => {
   return Status;
 };
 
-// Need ETag sent as IfMatch
-// 
 export const deleteDistribution = async (Id) => {
   const IfMatch = await getETag(Id);
 
   return IfMatch ? await send(new DeleteDistributionCommand({ Id, IfMatch })) : undefined;
 };
 
-export const getETag = async (Id) => (await send(new GetDistributionCommand({ Id })))?.ETag;
+export const getETag = async (Id) => (await getDistribution(Id))?.ETag;
 
-export const getDistribution = async (Id) => (await send(new GetDistributionCommand({ Id })))?.Distribution;
-
-export const getDistributionConfig = async (Id) => (await getDistribution(Id))?.DistributionConfig;
-
-export const getDistributionOrigins = async (Id) => (await getDistribution(Id))?.DistributionConfig.Origins;
+export const getDistribution = async (Id) => (await send(new GetDistributionCommand({ Id })));
 
 export const listDistributions = async () => (await send(new ListDistributionsCommand())).DistributionList.Items.map(({ Id, Comment, Enabled, Status }) => `${Id}\t${Enabled}\t${Status}\t${Comment}`);
 
