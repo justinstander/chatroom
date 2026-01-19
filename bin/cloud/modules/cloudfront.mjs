@@ -12,7 +12,7 @@ import { callerReference, sendCommand } from "./common.mjs";
 
 const send = sendCommand(new CloudFrontClient());
 
-export const createDistribution = async ({Comment, origin, CachePolicyId}) => await send(new CreateDistributionCommand({
+export const createDistribution = async ({ Comment, origin, CachePolicyId }) => await send(new CreateDistributionCommand({
   DistributionConfig: {
     CallerReference: callerReference(),
     DefaultRootObject: "index.html",
@@ -31,76 +31,38 @@ export const createDistribution = async ({Comment, origin, CachePolicyId}) => aw
     },
     DefaultCacheBehavior: {
       TargetOriginId: origin,
-      "TrustedSigners": {
-        "Enabled": false,
-        "Quantity": 0
-      },
-      "TrustedKeyGroups": {
-        "Enabled": false,
-        "Quantity": 0
-      },
-      "ViewerProtocolPolicy": "https-only",
-      "AllowedMethods": {
-        "Quantity": 2,
-        "Items": [
+      ViewerProtocolPolicy: "https-only",
+      AllowedMethods: {
+        Quantity: 2,
+        Items: [
           "HEAD",
           "GET"
         ],
-        "CachedMethods": {
-          "Quantity": 2,
-          "Items": [
+        CachedMethods: {
+          Quantity: 2,
+          Items: [
             "HEAD",
             "GET"
           ]
         }
       },
-      "SmoothStreaming": false,
-      "Compress": true,
-      "LambdaFunctionAssociations": {
-        "Quantity": 0
-      },
-      "FunctionAssociations": {
-        "Quantity": 0
-      },
-      "FieldLevelEncryptionId": "",
+      Compress: true,
       CachePolicyId,
-      "GrpcConfig": {
-        "Enabled": false
-      }
-    },
-    "CacheBehaviors": {
-      "Quantity": 0
-    },
-    "CustomErrorResponses": {
-      "Quantity": 0
     },
     Comment,
-    "Logging": {
-      "Enabled": false,
-      "IncludeCookies": false,
-      "Bucket": "",
-      "Prefix": ""
-    },
-    "PriceClass": "PriceClass_All",
+    PriceClass: "PriceClass_All",
     Enabled: true,
-    "ViewerCertificate": {
-      "CloudFrontDefaultCertificate": true,
+    ViewerCertificate: {
+      CloudFrontDefaultCertificate: true,
     },
-    "Restrictions": {
-      "GeoRestriction": {
-        "RestrictionType": "none",
-        "Quantity": 0
-      }
-    },
-    "HttpVersion": "http2",
-    "IsIPV6Enabled": true,
-    "ContinuousDeploymentPolicyId": "",
-    "Staging": false
+    HttpVersion: "http2",
+    IsIPV6Enabled: true,
+    Staging: false
   }
 }));
 
 export const disableDistribution = async (Id) => {
-  const { Distribution: { DistributionConfig }, ETag: IfMatch, } = await send(new GetDistributionCommand({ Id }));
+  const { Distribution: { DistributionConfig }, ETag: IfMatch, } = await getDistribution(Id);
   const { Distribution: { Status } } = await send(new UpdateDistributionCommand({
     Id,
     DistributionConfig: {
@@ -125,7 +87,7 @@ export const getDistribution = async (Id) => (await send(new GetDistributionComm
 
 export const listDistributions = async () => (await send(new ListDistributionsCommand())).DistributionList.Items.map(({ Id, Comment, Enabled, Status }) => `${Id}\t${Enabled}\t${Status}\t${Comment}`);
 
-export const invalidate = async (DistributionId) => await send(
+export const invalidateDistribution = async (DistributionId) => await send(
   new CreateInvalidationCommand({
     DistributionId,
     InvalidationBatch: {

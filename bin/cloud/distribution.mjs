@@ -5,7 +5,7 @@ import {
     deleteDistribution,
     disableDistribution,
     getDistribution,
-    invalidate,
+    invalidateDistribution,
     listDistributions
 } from "./modules/cloudfront.mjs";
 import {
@@ -34,7 +34,7 @@ switch (command) {
         print(await getDistribution(Id));
         break;
     case 'invalidate':
-        print(await invalidate(Id));
+        print(await invalidateDistribution(Id));
         break;
     case 'list':
         print(await listDistributions());
