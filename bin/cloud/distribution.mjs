@@ -12,28 +12,30 @@ import {
     commandLine,
     print
 } from "./modules/common.mjs";
-import packageJson from "../../package.json" with {type: "json"};
 
-const { args: [Id], command } = commandLine();
+const { args, command } = commandLine();
+
+let Id;
 
 switch (command) {
     case 'create':
-        print(await createDistribution({
-            Comment: `${packageJson.name} - ${packageJson.description}`,
-            origin: `${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`,
-            CachePolicyId: process.env.AWS_CLOUDFRONT_CACHE_POLICY_ID
-        }));
+        const [origin, CachePolicyId, Comment] = args;
+        print(await createDistribution({ CachePolicyId, Comment, origin }));
         break;
     case 'delete':
+        ([Id] = args);
         print(await deleteDistribution(Id));
         break;
     case 'disable':
+        ([Id] = args);
         print(await disableDistribution(Id));
         break;
     case 'get':
+        ([Id] = args);
         print(await getDistribution(Id));
         break;
     case 'invalidate':
+        ([Id] = args);
         print(await invalidateDistribution(Id));
         break;
     case 'list':

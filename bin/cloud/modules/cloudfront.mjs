@@ -12,7 +12,7 @@ import { callerReference, sendCommand } from "./common.mjs";
 
 const send = sendCommand(new CloudFrontClient());
 
-export const createDistribution = async ({ Comment, origin, CachePolicyId }) => await send(new CreateDistributionCommand({
+export const createDistribution = async ({ CachePolicyId, Comment, origin }) => await send(new CreateDistributionCommand({
   DistributionConfig: {
     CallerReference: callerReference(),
     DefaultRootObject: "index.html",

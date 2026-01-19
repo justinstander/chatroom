@@ -15,7 +15,7 @@ const send = sendCommand(new S3Client());
 
 export const listBuckets = async () => (await send(new ListBucketsCommand())).Buckets.map(({Name}) => Name);
 
-export const listObjects = async (Bucket) => (await send(new ListObjectsCommand({ Bucket }))).Contents.map(({ Key, LastModified }) => `${Key}\t${LastModified}`);
+export const listObjects = async (Bucket) => (await send(new ListObjectsCommand({ Bucket }))).Contents.map(({ Key }) => Key);
 
 export const putObject = async (Bucket, Key, ContentType) => await send(
   new PutObjectCommand({
